@@ -1,8 +1,6 @@
 import os
 import streamlit as st
 
-from langchain_openai import ChatOpenAI
-from langchian.schema import SystemMessage, HumanMessage, AIMessage
 
 #Page setup
 st.set_page_config(
