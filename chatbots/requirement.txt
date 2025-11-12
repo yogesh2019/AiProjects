@@ -1,2 +1,2 @@
 streamlit
-openai==1.52.2
+langchain-openai

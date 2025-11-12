@@ -1,26 +1,32 @@
-import os
 import streamlit as st
-from datetime import datetime
-import openai
+from langchain_openai import ChatOpenAI
 
-#Page setup
-st.set_page_config(
-    page_title = "Eva - Banker Chatbot", page_icon = "😂"
-)
-st.title("Eva your banking assistant")
+# --- Page Setup ---
+st.set_page_config(page_title="Chatbot Interface", page_icon="🤖", layout="wide")
+st.title("Chatbot Interface  🤖")
 
-st.write("this is a banking chat bot app ")
+# --- sidebar ---
+st.sidebar.header("Configuration")
+api_key = st.sidebar.text_input("OpenAi API key", type="password")
 
-
-# GEt api key from streamlit secrets or env
-OPENAI_API_KEY = None
-
-try:
-    OPENAI_API_KEY = st.secrets.get("OPEN_API_KEY")
-except Exception:
-    OPENAI_API_KEY = None
-
-if not OPENAI_API_KEY:
-    st.warning("No open api key found")
+if not api_key:
+    st.warning("Please enter you OpenAi API key in the sidebar")
     st.stop()
 
+
+# --- initialize LLM ---
+llm  = ChatOpenAI(
+    api_key= api_key,
+    model="gpt-4o-mini",
+    temperature=0.3
+)
+
+user_prompt = st.text_input("Enter a simple Question for the chatbot:")
+if(st.button("Get Answer")):
+    if user_prompt:
+        with st.spinner("Generating response..."):
+            response = llm.invoke(user_prompt)
+        st.markdown("### Response:")
+        st.write(response.text)
+    else:
+        st.warning("Please enter a question to get an answer.")
