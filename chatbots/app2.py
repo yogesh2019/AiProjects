@@ -25,11 +25,16 @@ if st.button("Load SRT"):
             docs = loader.load()  # returns list of Document objects
             count = len(docs) if docs is not None else 0
             if count > 0:
-                st.success("ok — file loaded successfully.")
-                st.write(f"Documents loaded: {count}")
-                # optionally show small preview
-                if st.checkbox("Show preview of first document text"):
-                    st.text(docs[0].page_content[:1000])
+                splitter = RecursiveCharacterTextSplitter(chunk_size=500, chunk_overlap=50)
+                chunks = splitter.split_documents(docs)
+
+                st.success("ok — chunks created successfully.")
+                st.write(f"Total chunks: {len(chunks)}")
+                st.caption(f"Chunk size: {500}, overlap: {50}")
+
+                # Optional: Show a preview of the first chunk
+                if len(chunks) > 0 :
+                    st.text(chunks[0].page_content[:1000])
             else:
                 # some loaders return [] for empty / unreadable files
                 st.warning("Loaded but no documents were returned (0 items). Check the file content.")
