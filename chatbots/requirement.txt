@@ -2,3 +2,6 @@ streamlit
 langchain
 langchain-community
 pysrt
+langchain-openai
+chromadb
+sentence-transformers
